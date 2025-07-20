@@ -1,0 +1,168 @@
+# Generated: Sun Jul 20 14:42:43 UTC 2025
+# Tool version: 24.09.1 (stable/24.09.1: 9aa6a63b62b812c4957a59bcd32b843b8c39bdb2)
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: deployment
+spec: {}
+---
+apiVersion: v1
+data:
+  OS_PASSWORD: TGk2OW51eCoxMjM0
+  OS_USERNAME: YWRtaW4=
+kind: Secret
+metadata:
+  name: system-endpoint
+  namespace: deployment
+stringData:
+  OS_AUTH_URL: http://192.168.204.1:5000/v3
+  OS_INTERFACE: internal
+  OS_PROJECT_DOMAIN_NAME: Default
+  OS_PROJECT_NAME: admin
+  OS_REGION_NAME: 6f6b43e3b7664cf2a458d6b6cabb3502
+type: Opaque
+---
+apiVersion: v1
+data:
+  content: IyBXaW5kIFJpdmVyIFByb2R1Y3QgQWN0aXZhdGlvbiBGaWxlIChpbnN0YWxsLnR4dCkKIyBJc3N1ZWQgZm9yIGhvc3Q6IDxJbnRlcm5hbC1EZXY+IDxJbnRlcm5hbC1EZXY+IDxBbnk+CiMgTGljZW5zZSBudW1iZXIocyk6IEludGVybmFsCiMgSXNzdWVkIG9uOiAwNC1vY3QtMjAyNCAwOTo1MDo1MAojCiMgTm90ZTogdGhpcyBsaWNlbnNlIGlzIGdlbmVyYXRlZCBjdW11bGF0aXZlbHkgZm9yIGFsbAojIFdpbmQgUml2ZXIgc29mdHdhcmUgbWFuYWdlZCBieSB0aGlzIGhvc3QuCgojIDEuIEZsZXhMTSBsaWNlbnNlIGZpbGU6CiMgQmVnaW46IFNlcnZlciBsaWNlbnNlICAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KIyBTZXJpYWwgTnVtYmVyOiBJbnRlcm5hbC1JbnRlcm5hbC1EZXYtRzRXREM5Q1BFSwoKUEFDS0FHRSBXUkNQX0NPTlRBSU5FUl9QS0cgd3JzZCAyNCA2RURGQjRCMDRBNjEgXAoJQ09NUE9ORU5UUz1XUkNQX0NPTlRBSU5FUjoyNC4wOSBPUFRJT05TPVNVSVRFIFwKCVNJR049MkRFRkM2RUFDMjVDCklOQ1JFTUVOVCBXUkNQX0NPTlRBSU5FUl9QS0cgd3JzZCAyNCAzMS1kZWMtMjAyOSB1bmNvdW50ZWQgXAoJOTUxM0FGRUI5NDBFIFZFTkRPUl9TVFJJTkc9PGxuPkludGVybmFsPC9sbj48cHM+MjIxMy00MzwvcHM+IFwKCUhPU1RJRD1BTlkgSVNTVUVEPTMxLW9jdC0yMDI0IFwKCVNOPXNlcmlhbC1JbnRlcm5hbC1EZXYtTFYySVdBVUxFQiBTVEFSVD0zMS1vY3QtMjAyNCBcCglTSUdOPTc5MDM2OUUwMDM4QQo=
+kind: Secret
+metadata:
+  name: system-license
+  namespace: deployment
+type: Opaque
+---
+apiVersion: starlingx.windriver.com/v1
+kind: System
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: aiosxvbox
+  namespace: deployment
+spec:
+  dnsServers:
+  - 8.8.8.8
+  - 8.8.4.4
+  license:
+    secret: system-license
+  ntpServers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  ptp:
+    mechanism: e2e
+    mode: hardware
+    transport: l2
+  storage:
+    backends:
+    - name: ceph-store
+      network: mgmt
+      replicationFactor: 1
+      type: ceph
+    filesystems:
+    - name: database
+      size: 10
+  vswitchType: none
+---
+apiVersion: starlingx.windriver.com/v1
+kind: HostProfile
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: controller-0-profile
+  namespace: deployment
+spec:
+  administrativeState: unlocked
+  appArmor: disabled
+  boardManagement:
+    type: none
+  bootDevice: /dev/disk/by-path/pci-0000:00:0d.0-ata-1.0
+  clockSynchronization: ntp
+  console: tty1
+  hwSettle: "0"
+  installOutput: graphical
+  interfaces:
+    ethernet:
+    - class: platform
+      dataNetworks: []
+      name: oam0
+      platformNetworks:
+      - oam
+      port:
+        name: enp0s3
+      ptpInterfaces: []
+      ptpRole: none
+      uuid: ""
+  kernel: standard
+  memory:
+  - functions:
+    - function: platform
+      pageCount: 2150400
+      pageSize: 4KB
+    node: 0
+  personality: controller
+  powerOn: true
+  processors:
+  - functions:
+    - count: 0
+      function: vswitch
+    node: 0
+  provisioningMode: static
+  rootDevice: /dev/disk/by-path/pci-0000:00:0d.0-ata-1.0
+  storage:
+    filesystems:
+    - name: scratch
+      size: 16
+    - name: backup
+      size: 25
+    - name: docker
+      size: 30
+    - name: kubelet
+      size: 10
+    - name: log
+      size: 8
+    - name: var
+      size: 20
+    - name: root
+      size: 20
+    osds:
+    - cluster: ceph_cluster
+      function: osd
+      path: /dev/disk/by-path/pci-0000:00:0d.0-ata-2.0
+    volumeGroups:
+    - name: cgts-vg
+      physicalVolumes:
+      - path: /dev/disk/by-path/pci-0000:00:0d.0-ata-1.0
+        size: 268
+        type: partition
+  subfunctions:
+  - controller
+  - worker
+---
+apiVersion: starlingx.windriver.com/v1
+kind: Host
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: controller-0
+  namespace: deployment
+spec:
+  match:
+    bootMAC: "00:00:00:00:00:00"
+  overrides:
+    interfaces:
+      ethernet:
+      - class: platform
+        dataNetworks: []
+        mtu: 1500
+        name: lo
+        platformNetworks:
+        - mgmt
+        - cluster-host
+        port:
+          name: lo
+        ptpInterfaces: []
+        ptpRole: none
+        uuid: ""
+    provisioningMode: dynamic
+  profile: controller-0-profile
+---
